@@ -1,0 +1,25 @@
+block content
+  h1=title 
+  table 
+    tr 
+      td ID
+      td First name 
+      td Last name 
+      td DOB
+      td Age
+    for name in users
+      tr 
+        td= name.id
+        td= name.firstName
+        td= name.lastName 
+        td= name.DOB 
+        td= name.Age
+        td: a(href="http://localhost:3000/delete/#{name.id}" data-method="delete") delete
+        td: a(href="http://localhost:3000/edit/#{name.id}" data-method="update") Update
+          
+         
+  
+
+  a(href="http://localhost:3000") back to home
+  br
+  a(href="http://localhost:3000/AddUsers") Add new user

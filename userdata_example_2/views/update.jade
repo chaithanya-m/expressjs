@@ -1,0 +1,16 @@
+script(src="./routes/index.js")
+block content
+  h1=title 
+  form(method="POST", action="/update/#{Id}")
+    p FirstName: 
+        input(type="text" id="FirstName" name="FName" value= FName)
+    p LastdName: 
+        input(type="text" id="LastName" name="LName" value= LName)
+    p DOB: 
+        input(type="text" id="DOB" name="Dob" value= Dob)
+     p age: 
+        input(type="text" id="age" name="Age" value= Age)
+        
+    input(type="submit" value='update' )
+    
+a(href="http://localhost:3000") back to home pag

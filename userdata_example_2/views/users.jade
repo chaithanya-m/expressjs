@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  table 
+    tr 
+      td ID
+      td First name 
+      td Last name 
+      td DOB
+      td Age
+      td Actions
+    for name in data
+      tr 
+        td= name.ID 
+        td= name.FirstName
+        td= name.LastName 
+        td= name.DOB 
+        td= name.age
+        td: a(href="http://localhost:3000/delete/#{name.ID}" data-method="delete") delete
+        td: a(href="http://localhost:3000/edit/#{name.ID}" data-method="update") Update
+          
+         
+  
+
+  a(href="http://localhost:3000/Add") add new user 
+
+
+  
+  

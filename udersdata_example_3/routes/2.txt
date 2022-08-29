@@ -1,0 +1,100 @@
+const { text } = require('express');
+var express = require('express');
+var router = express.Router();
+const { Sequelize, Model, DataTypes } = require("sequelize");
+const sequelize = new Sequelize('firstDB', 'root', 'password', {
+  host: 'localhost',
+  dialect:'mysql'
+});
+
+class User extends Model {}
+User.init({
+  firstName: DataTypes.STRING,
+  lastName: DataTypes.STRING,
+  DOB: DataTypes.TEXT,
+  Age: DataTypes.INTEGER
+}, {
+  sequelize, 
+  modelName: 'User',
+  freezeTableName: true
+});
+
+// User.drop();
+
+/* GET home page. */
+//home page
+router.get('/', function(req, res, next) {
+  res.render('index', { title: 'Express' });
+});
+
+//list of users
+router.get('/listofUsers', async function(req, res, next) {
+  const users = await User.findAll();
+  res.render('listofUsers', { users });
+  // res.end(JSON.stringify(users));
+});
+
+//go to add
+router.get('/Add', function (req, res, next) {
+  res.render('Add', { title: 'Add New User', FName: '', LName: "", Dob: "",Age: "" });
+});
+
+// Add new user
+
+router.post('/add',async function (req, res, next) {
+
+  const users = await User.create({
+    firstName:req.body.FName,
+    lastName: req.body.LName,
+    DOB: req.body.Dob,
+    Age: req.body.Age
+  });
+  sequelize.sync({ save: true });
+  res.redirect('/listofUsers')
+});
+
+
+// edit user
+router.get('/edit/:id', async function(req, res, next) {
+  const user = await User.findOne({
+    attributes :['id','firstName', 'lastName','DOB','Age']
+  },{
+    where: { id:req.params.id}
+  })
+  console.log(user.id)
+    // res.render('Update', { user });
+    res.render('Update', {
+      title: 'update users', 
+      Id: user.id,
+      FName: user.firstName,
+      LName: user.lastName,
+      Dob: user.DOB,
+      Age: user.Age
+  });
+});
+// update changes
+
+router.post('/Update/:Id' , async function(req, res, next){
+  console.log(req.body.FName)
+  await User.update({ 
+    firstName:req.body.FName,
+    lastName: req.body.LName,
+    DOB: req.body.Dob,
+    Age: req.body.Age
+   }, 
+   { where: {id: req.params.Id}
+   
+  });
+  res.redirect('/listofUsers')
+});
+// delete
+router.get('/delete/:id', async function(req, res, next) { 
+   
+
+  await User.destroy({
+    where: {id: req.params.id}
+  });
+  res.redirect("/listofUsers")
+});
+
+module.exports = router;
